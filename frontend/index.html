@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>My tasks</h1>
+            <button class="btn-add" id="btnAdd" title="Add new task">+</button>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="active">Active</button>
+            <button class="tab-btn" data-tab="all">All</button>
+            <button class="tab-btn" data-tab="closed">Closed</button>
+        </div>
+
+        <div class="task-list" id="taskList">
+            <!-- Tasks will be dynamically added here -->
+        </div>
+
+        <div id="emptyState" class="empty-state">
+            <p>No tasks yet. Click the + button to add your first task!</p>
+        </div>
+    </div>
+
+    <!-- Modal for adding/editing tasks -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Task</h2>
+                <button class="btn-close" id="btnCloseModal">&times;</button>
+            </div>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="taskName">Task Name *</label>
+                    <input type="text" id="taskName" placeholder="Enter task name" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskDate">Date *</label>
+                        <input type="date" id="taskDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskTime">Time *</label>
+                        <input type="time" id="taskTime" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" rows="3" placeholder="Enter task description (optional)"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="btnCancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for task details -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Task Details</h2>
+                <button class="btn-close" id="btnCloseDetails">&times;</button>
+            </div>
+            <div class="details-content">
+                <div class="detail-section">
+                    <label>Title</label>
+                    <div class="detail-value" id="detailTitle"></div>
+                </div>
+
+                <div class="detail-section">
+                    <label>Description</label>
+                    <div class="detail-value" id="detailDescription"></div>
+                </div>
+
+                <div class="detail-section">
+                    <label>Status</label>
+                    <div class="detail-value">
+                        <span class="status-badge" id="detailStatus">active</span>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-section">
+                        <label>Created</label>
+                        <div class="detail-value detail-date" id="detailCreated"></div>
+                    </div>
+                    <div class="detail-section">
+                        <label>Modified</label>
+                        <div class="detail-value detail-date" id="detailModified"></div>
+                    </div>
+                </div>
+
+                <div class="comments-section">
+                    <h3>Comments (<span id="commentCount">0</span>)</h3>
+                    <div class="comments-list" id="commentsList">
+                        <p class="no-comments">No comments yet. Add one below.</p>
+                    </div>
+                    <div class="comment-form">
+                        <textarea id="commentText" placeholder="Add a comment... (Cmd/Ctrl + Enter to submit)" rows="2"></textarea>
+                        <button class="btn btn-comment" id="btnAddComment">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                            </svg>
+                            Add Comment
+                        </button>
+                    </div>
+                </div>
+
+                <div class="details-actions">
+                    <button class="btn btn-delete-task" id="btnDeleteTask">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        </svg>
+                        Delete
+                    </button>
+                    <div class="details-actions-right">
+                        <button class="btn btn-secondary" id="btnCloseDetailsBottom">Close</button>
+                        <button class="btn btn-primary" id="btnEditTask">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                            </svg>
+                            Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
